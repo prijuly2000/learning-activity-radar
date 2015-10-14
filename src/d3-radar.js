@@ -1,6 +1,7 @@
 
 // Mouse hover event for tooltip
 // The tooltip appears on hover over a polygon displaying the student ID
+// d3.event gives the co-ordinates to display the tooltip 
 var mousemove = function(d) 
 {
   var xPosition = d3.event.pageX + 5;
@@ -16,30 +17,43 @@ var mousemove = function(d)
 };
 
 // Mouse out for tooltip
-// When outside the area then 
+// When outside the polygon then hide the tooltip
 var mouseout = function() 
 {
   d3.select("#tooltip").classed("hidden", true);
 };
 
 // metricConfiguration is label , metric and domain sent 
-// while calling the function.
+// while calling the function. (check d variable in the mainscript.js)
 function radar(metricConfiguration) 
 {
-  var color= d3.scale.category10();
+  // Color provides the range of the colors that can be alloted to the polygons 
+  // depending on the risk category of the data that is being plotted
+  // for NO RISK and LOW RISK, Green color
+  // for MEDIUM RISK , Orange color
+  // for HIGH RISK, Red color
+  var color=d3.scale.ordinal()
+            .domain(["NO RISK","LOW RISK","MEDIUM RISK","HIGH RISK"])
+            .range(["green","green","orange","red"]);
+  
+  // Metrics is the label, field (or metric) and domain 
+  // for the axes provided while calling the function
   var metrics = metricConfiguration,
     margin = 40,
+    // Radius provides the radius of the background circles 
+    // and the range for plotting the polygon
     radius = 200,
+    // pointRadius is the radius of the points plotted 
+    // on the corners of the polygon
     pointRadius = 3,
-    labelOffset = radius + 10;
+    // lebelOffset provides the offset for the position of the axes label 
+    labelOffset = radius;
 
   function chart(selection) 
   {
     // Side is the size of the SVG element and the chart
     // Increament the multiplying factor to increase the size of the chart
-    var side = (radius + margin) * 2.5,
-      pointCount = 0;
-
+    var side = (radius + margin) * 2.7;
     selection.each(function (data) 
     {
 
@@ -61,9 +75,11 @@ function radar(metricConfiguration)
         return metric;
       });
 
+      //console.log(selection);
       var scaleGPA =d3.scale.linear()
-                        .range([0,31.25,62.5,125,187.5,250])
-                        .domain([0,1,2,3,4,5]);
+                    .range([0,62.5,125,187.5,250])
+                    .domain([0,1,2,3,4]);
+
       // Augment data.
       // Generate X & Y co-ordinates for the data according to the data values and scale
       data = data.map(function (d) 
@@ -95,7 +111,6 @@ function radar(metricConfiguration)
       // Select the svg element, if it exists.
       var svg = d3.select(this).selectAll('svg').data([metrics]);
      
-      
       // Otherwise, create the skeletal chart.
       var gEnter = svg.enter()
         .append('svg')
@@ -135,27 +150,34 @@ function radar(metricConfiguration)
         .enter()
         .append('g')
         .attr('class','area')
-        .attr("stroke",function(d,i){ return color(i)})
-        .attr('fill',function(d,i){return color(i)})
-        .each(function (d,i) {  index = i; chart.drawArea(d3.select(this));  })
+        .attr("stroke",function(d,i){ return color(d.MODEL_RISK_CONFIDENCE)})
+        .attr('fill',function(d,i){return color(d.MODEL_RISK_CONFIDENCE)})
+        .each(function (d) { chart.drawArea(d3.select(this));  })
         .on('mousemove',mousemove)
-        .on('mouseout',mouseout);
-        
+        .on('mouseout',mouseout);       
         
     });
   }
 
-  // Check for the arguments passed at the time of the 
-  // function call in the begining
+  // Check if the radius has been set while calling the function 
+  // If nothing is given then return undefined to stop the further execution
+  // If some value is passed then store it in the radius variable for further reference 
+  // This radius is used to draw the background circles and set the scale 
+  // to draw other elements like circle points at the corners, polygons etc
   chart.radius = function (_) 
   {
-    if (!arguments.length) {
+    if (!arguments.length) 
+    {
       return radius;
     }
     radius = _;
     return chart;
   };
 
+  // Check if the margin has been set while calling the function 
+  // If nothing is given then return undefined to stop the further execution
+  // If some value is passed then store it in the margin variable for further reference 
+  // Margin is used to position the chart with specified margin
   chart.margin = function (_) 
   {
     if (!arguments.length) 
@@ -166,27 +188,35 @@ function radar(metricConfiguration)
     return chart;
   };
 
+  // Check if the radius has been set while calling the function 
+  // If nothing is given then return undefined to stopt the further execution
+  // If some value is passed then store it in the radius variable for further reference 
+  // This radius is used to set the radius for the circles drawn at the 
+  // corners of the polygon on the axes
   chart.pointRadius = function (_) 
   {
-    if (!arguments.length) {
+    if (!arguments.length) 
+    {
       return pointRadius;
     }
     pointRadius = _;
     return chart;
   };
 
-  var numOfAxes = 6;
+  // This is the total number of axes that will be drawn
+  var numOfAxes = 5;
   
   // Draw the background circle for the chart 
+  // 
   // Other style properties are set in the style.css
   chart.drawBackground = function (selection) 
     {
-
-      var step = radius / 4;
       
       // Circle background for the chart
+      // Data is passed according to the scaling of the marks or ticks
+      // like 25 goes to 31.25, 50 goes to 62.5 likewise
       selection.selectAll('.background')
-        .data(([0,31.25,62.5,125,187.5,250]).reverse())
+        .data(([0,62.5,125,187.5,250]).reverse())
         .enter()
         .append('circle')
         .attr('cx', 0)
@@ -195,8 +225,10 @@ function radar(metricConfiguration)
         .attr('r', function (d) { return d; });
         
       // Ticks on the line axes
-      var markers = [0,25,50,100,150,200];
-      var markerPositions =[0,31.25,62.5,125,187.5,250];
+      // Ticks or markers are drawn in a way that 3 becomes benchmark
+      // for GPA and 100 becomes benchmark for the other axes
+      var markers = [0,50,100,150,200];
+      var markerPositions =[0,62.5,125,187.5,250];
       for(var j=0; j<numOfAxes; j++)
       {
           // Ticks 
@@ -216,6 +248,7 @@ function radar(metricConfiguration)
           // Skip the 0 tick for GPA as its already been plotted
           if(j == 0)
             continue;
+
           // Ticks  for only GPA
           selection.selectAll(".tick")
            .data([1]) //dummy data
@@ -226,13 +259,18 @@ function radar(metricConfiguration)
            .attr("class", "legend")
            .style("font-family", "sans-serif")
            .style("font-size", "16px")
-           .attr("transform", "translate("+(markerPositions[j]-6*j)+",-"+(markerPositions[j]-30*j)+") ")
+           .attr("transform", "translate("+(markerPositions[j]-10*j)+",-"+(markerPositions[j]-30*j-25)+") ")
            .attr("fill", "#737373")
           .text(j);
             
       }
   };
 
+  // Draw the labels for the axes. Add the text element first at 
+  // an appropriate place and position it according to the need by
+  // adding some value to the labelOffset
+  // The position is decided based on the angle provided by the data variable
+  // The angle is generated in the 
   chart.drawAxisLabel = function (selection) 
   {
 
@@ -241,7 +279,7 @@ function radar(metricConfiguration)
       .attr('class', 'axisLabel')
       .attr('x', function (d) 
       {
-          var pos = labelOffset * Math.cos(d.angle);
+          var pos = (labelOffset + 40) * Math.cos(d.angle);
 
           if (Math.PI / 2 === Math.abs(d.angle)) 
           {
@@ -255,30 +293,31 @@ function radar(metricConfiguration)
           return pos;
       })
       .attr('y', function (d) { return (labelOffset + 85) * Math.sin(d.angle); });
-      
-      
-     
-      
+        
   };
 
   // This function draws the polygon based on the calculated values 
-  // stored in data
+  // stored in the data. The values are calculated at the begining of the chart function
+  // in the Compute configuration phase.
   chart.drawArea = function (selection) 
   {
     // This is to connect all the points present on the chart using lines
-    // which displays it as polygon
+    // which displays it as polygon.
      selection.append('path')
         .attr('d', function (d,i) 
         {       
-          return d3.svg.line()
+            return d3.svg.line()
             .x(function (d) { return d.x; })
             .y(function (d) { return d.y; })
             .interpolate('linear-closed')
             .call(this, d.points);
         })
-        .attr('stroke',function(){return color(index);})
+        .attr('stroke',function(d){return color(d.MODEL_RISK_CONFIDENCE);})
         
     // This function plots all the circle dots on the chart
+    // These circles are drawn on the axes which are the corners of the
+    // polygon. They signify the value at the position on the axes
+    // The radius of the circles is the pointRadius set at the begining
     selection.selectAll('.radarPoint')
       .data(function (d) { return d.points;})
       .enter()
