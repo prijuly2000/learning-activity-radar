@@ -23,6 +23,12 @@ var mouseout = function()
   d3.select("#tooltip").classed("hidden", true);
 };
 
+function drawLegend()
+{
+  var legendData=""
+  
+}
+
 // metricConfiguration is label , metric and domain sent 
 // while calling the function. (check d variable in the mainscript.js)
 function radar(metricConfiguration) 
@@ -109,11 +115,14 @@ function radar(metricConfiguration)
             });
 
       // Select the svg element, if it exists.
-      var svg = d3.select(this).selectAll('svg').data([metrics]);
+      var svg = d3.select(this)
+      .selectAll('.chartsvg')
+      .data([metrics]);
      
       // Otherwise, create the skeletal chart.
       var gEnter = svg.enter()
         .append('svg')
+        .attr("class","chartsvg")
         .append('g')
         .attr('transform', 'translate(' + (side / 2) + ', ' + (side / 2) + ')');//center chart
 
@@ -331,5 +340,8 @@ function radar(metricConfiguration)
       
   };
 
+  drawLegend();
   return chart;
 }
+
+

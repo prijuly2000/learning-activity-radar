@@ -9,6 +9,7 @@
 <script src="../src/d3-radar.js" charset="utf-8"></script>
 <script src="mainscript.js" charset="utf-8"></script>
 <link rel="stylesheet" href="../src/style.css" charset="utf-8"></link>
+<link rel="stylesheet" href="../src/legend.css" charset="utf-8"></link>
 </head>
 <body>
 	<div id="tooltip" class="hidden">
@@ -44,6 +45,51 @@
 			</table>
 		</div>
 		<div id="content"></div>
+		<div width="100%">
+		<table class="legend" >
+			<tr>
+				<td>
+					<svg height='20px' width='20px'>
+						<g transform='translate(10,10)'>
+							<circle r='10px' cx='0px' cy='0px' fill='black' width='40px' height='40px'></circle>
+						</g>
+					</svg>
+				</td>
+				<td>Benchmark</td>
+			</tr>
+			<tr>
+				<td>
+					<svg height='25px' width='20px'>
+						<g transform='translate(10,10)'>
+							<circle r='10px' cx='0px' cy='0px' fill='green' width='40px' height='40px'></circle>
+						</g>
+					</svg>
+				</td>
+				<td>Low Risk</td>
+			</tr>
+			<tr>
+				<td>
+					<svg height='20px' width='20px'>
+						<g transform='translate(10,10)'>
+							<circle r='10px' cx='0px' cy='0px' fill='orange' width='40px' height='40px'></circle>
+						</g>
+					</svg>
+				</td>
+				<td>Medium Risk</td>
+			</tr>
+			<tr>
+				<td>
+					<svg height='20px' width='20px'>
+						<g transform='translate(10,10)'>
+							<circle r='10px' cx='0px' cy='0px' fill='red' width='40px' height='40px'></circle>
+						</g>
+					</svg>
+				</td>
+				<td>High Risk</td>
+			</tr>
+
+		</table>
+	</div>
 	</div>
 
 	<div class="container" id="footer">Marist College, 3399 North

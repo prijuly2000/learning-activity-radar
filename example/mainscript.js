@@ -11,6 +11,22 @@ function updateDropdownList(filteredData)
     return (studentOptions);
 }
 
+// This function highlights the benchark on selection of the student,
+// on selection of a category and on page load when the chart is displayed.
+function highlightBenchmark()
+{
+	 // For benchmark data, change the color of the whole polygon
+	// Here changes the color of the stroke and the area , not the corner circle dots
+	d3.select(".area:last-child path")
+	.attr("fill","black")
+	.attr("stroke","black");
+
+	// Here it changes the color of the corner circles
+	d3.select(".area:last-child")
+	.attr("fill","black")
+	.attr("stroke","black");
+}
+
 // benchMarkData is added and drawn on the selection of a particular student or 
 // on selection of a particular category  	
 var benchMarkData = {
@@ -64,9 +80,26 @@ function updateData(data)
     return data;
 }
 
+// Here all the legend table is updated with the color and the information 
+// needed to interprete the data rendered in the visualization
+function updateLegend(filteredData)
+{
+    var tableData = "<tr><td><svg height='20px' width='20px'><g transform='translate(10,10)'><circle r='10px' cx='0px' cy='0px' fill='black' width='40px' height='40px'></circle></g></svg></td><td>Benchmark</td></tr>";  
+    if(filteredData!="")
+    {
+      for(item in filteredData)
+      {
+        tableData += "<tr><td><svg height='20px' width='20px'><g transform='translate(10,10)'><circle r='10px' cx='0px' cy='0px' fill='black' width='40px' height='40px'></circle></g></svg></td><td>Benchmark</td></tr>"
+      }
+    }
+    $(".legend").html(tableData);
+
+    
+}
+
 d3.json("riskscores2.json", function(error, data) 
 {	
-
+	//console.log(benchMarkData[0])
 	updateData(data);
 
 	// Hide both the tables in the begining
@@ -106,7 +139,7 @@ d3.json("riskscores2.json", function(error, data)
 	      }
 	      else 
 	      {
-	          filteredData=data;
+	          filteredData = data;
 	      }
 	      $("#studentList").html(updateDropdownList(filteredData));
 	     
@@ -123,16 +156,8 @@ d3.json("riskscores2.json", function(error, data)
 	      // For benchmark data, change the color of the whole polygon
 	      if(selectedCategory!="")
 	      {
-	      	// Here changes the color of the stroke and the area , not the corner circle dots
-			d3.select(".area:last-child path")
-			.attr("fill","black")
-			.attr("stroke","black");
-
-	      	// Here it changes the color of the corner circles
-			d3.select(".area:last-child")
-			.attr("fill","black")
-			.attr("stroke","black");
-		  }
+	      	highlightBenchmark();
+		    }
 
 	      // Hide all the tables as more than one student data is drawn
 	      $(".CSSTableGenerator").fadeOut();
@@ -172,8 +197,7 @@ d3.json("riskscores2.json", function(error, data)
       "label": "Sessions Activity",
       "metric": "R_SESSIONS",
       "domain" : [0, 200]
-    }]; 
-  
+    }];   
   
   
   var chart = radar(d)
@@ -186,24 +210,26 @@ d3.json("riskscores2.json", function(error, data)
     selection.selectAll('.radarPoint')
   };
 
-  
+  // Render the benchmark on page load 
   d3.select("#content")
-      .datum(data)
+      .datum([benchMarkData])
       .call(chart);
+
+  highlightBenchmark();
       
   // On selection of the student, update the profile and 
   // indicator table with the selected student's information
+  var filteredData="";
   $('#studentList').change(function()
       {
         var selectedStudent = $("#studentList").val() ;
-        var filteredData="";
+        
         if(selectedStudent!="")
         {
             filteredData = data.filter(function (el) 
             {
                   return el.ALTERNATIVE_ID == selectedStudent;
             });
-            //console.log(filteredData);
             
             // Generate the proper HTML code to display the profile table
             var tableData = "<tr><td colspan='2'>Profile</td></tr>";
@@ -230,16 +256,18 @@ d3.json("riskscores2.json", function(error, data)
             // var indGPA=d3.scale.linear().domain([0,3,4]).range(["red","red", "green"]);
             tableData="<tr><td colspan='3'>Indicator</td></tr>";
             for (var i = 0; i < d.length; i++) 
-            {                                                    // If value if NULL then replace with 0
+            {                                                    
                 tableData +="<tr><td>"+d[i]["label"]+"</td><td>"
-                        +(parseFloat(filteredData[0][d[i]["metric"]]).toFixed(2) || 0)
+                        +(parseFloat(filteredData[0][d[i]["metric"]]).toFixed(2) || 0) // If value if NULL then replace with 0
                         +"</td>"
-                         +"</tr>";              
+                        +"<td><svg height='15px' width='20px'><g transform='translate(7,7)'><circle r='5px' cx='0px' cx='0px' style='fill:green;' width='15px' height='15px'></circle></g></svg></td>"
+                        +"</tr>";              
             }
+            console.log(tableData);
             $("#indicator").html(tableData);
             $(".CSSTableGenerator").fadeIn();
             $(".profilepic").fadeIn();
-            
+           
         }
         else
         {
@@ -261,25 +289,17 @@ d3.json("riskscores2.json", function(error, data)
              
         }
         
+        // Add the benchmark to the filtered data to draw the benchmark
         filteredData.push(benchMarkData);
 
+        // Render the filtered data
         d3.select("svg").remove();
          d3.select("#content")
         .datum(filteredData)
         .call(chart);
 
-        // For benchmark data, change the color of the whole polygon
-		// Here changes the color of the stroke and the area , not the corner circle dots
-		d3.select(".area:last-child path")
-		.attr("fill","black")
-		.attr("stroke","black");
-
-		// Here it changes the color of the corner circles
-		d3.select(".area:last-child")
-		.attr("fill","black")
-		.attr("stroke","black");
-		
-
+        // Call method to highlight the benchmark
+        highlightBenchmark();		
       });
-  
+
 });
