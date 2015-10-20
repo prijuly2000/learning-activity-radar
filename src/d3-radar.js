@@ -258,6 +258,58 @@ function radar(metricConfiguration)
           if(j == 0)
             continue;
 
+          selection.selectAll(".tick")
+           .data([1]) //dummy data
+           .enter()
+           .append("svg:text")
+           .attr("x", "0")
+           .attr("y", "0")
+           .attr("class", "legend")
+           .style("font-family", "sans-serif")
+           .style("font-size", "14px")
+           .attr("transform", "translate("+(markerPositions[j]-10*j)+","+(markerPositions[j]-30*j-10)+")")
+           .attr("fill", "#737373")
+          .text(markers[j]);
+
+          selection.selectAll(".tick")
+           .data([1]) //dummy data
+           .enter()
+           .append("svg:text")
+           .attr("x", "0")
+           .attr("y", "0")
+           .attr("class", "legend")
+           .style("font-family", "sans-serif")
+           .style("font-size", "14px")
+           .attr("transform", "translate(5,"+(markerPositions[j])+")")
+           .attr("fill", "#737373")
+          .text(markers[j]);
+          
+          selection.selectAll(".tick")
+           .data([1]) //dummy data
+           .enter()
+           .append("svg:text")
+           .attr("x", "0")
+           .attr("y", "0")
+           .attr("class", "legend")
+           .style("font-family", "sans-serif")
+           .style("font-size", "14px")
+           .attr("transform", "translate(-"+(markerPositions[j])+","+(markerPositions[j]-30*j-10)+")")
+           .attr("fill", "#737373")
+          .text(markers[j]);
+
+          selection.selectAll(".tick")
+           .data([1]) //dummy data
+           .enter()
+           .append("svg:text")
+           .attr("x", "0")
+           .attr("y", "0")
+           .attr("class", "legend")
+           .style("font-family", "sans-serif")
+           .style("font-size", "14px")
+           .attr("transform", "translate(-"+(markerPositions[j]-5*j+10)+",-"+(markerPositions[j]-30*j-30)+")")
+           .attr("fill", "#737373")
+          .text(markers[j]);
+
           // Ticks  for only GPA
           selection.selectAll(".tick")
            .data([1]) //dummy data

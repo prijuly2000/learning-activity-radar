@@ -80,22 +80,6 @@ function updateData(data)
     return data;
 }
 
-// Here all the legend table is updated with the color and the information 
-// needed to interprete the data rendered in the visualization
-function updateLegend(filteredData)
-{
-    var tableData = "<tr><td><svg height='20px' width='20px'><g transform='translate(10,10)'><circle r='10px' cx='0px' cy='0px' fill='black' width='40px' height='40px'></circle></g></svg></td><td>Benchmark</td></tr>";  
-    if(filteredData!="")
-    {
-      for(item in filteredData)
-      {
-        tableData += "<tr><td><svg height='20px' width='20px'><g transform='translate(10,10)'><circle r='10px' cx='0px' cy='0px' fill='black' width='40px' height='40px'></circle></g></svg></td><td>Benchmark</td></tr>"
-      }
-    }
-    $(".legend").html(tableData);
-
-    
-}
 
 d3.json("riskscores2.json", function(error, data) 
 {	
