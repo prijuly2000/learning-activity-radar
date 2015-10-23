@@ -17,20 +17,21 @@ function highlightBenchmark()
 {
 	 // For benchmark data, change the color of the whole polygon
 	// Here changes the color of the stroke and the area , not the corner circle dots
-	d3.select(".area:last-child path")
+  d3.select(".area:last-child path")
 	.attr("fill","black")
 	.attr("stroke","black");
 
 	// Here it changes the color of the corner circles
 	d3.select(".area:last-child")
 	.attr("fill","black")
-	.attr("stroke","black");
+	.attr("stroke","black"); 
+
 }
 
 // benchMarkData is added and drawn on the selection of a particular student or 
 // on selection of a particular category  	
 var benchMarkData = {
-		"ALTERNATIVE_ID" : "Bench Mark",
+		"ALTERNATIVE_ID" : "Class Benchmark Performance",
 		"COURSE_ID" : "Bench_Mark",
 		"SUBJECT" : "Bench_Mark",
 		"ONLINE_FLAG" : "1",
@@ -64,26 +65,48 @@ var benchMarkData = {
 		"MODEL_RISK_CONFIDENCE" : "MEDIUM RISK"
 	};
 
+function colorIndicator(field, value)
+{
+  var color ;
+  var indicatorFunction;
+  if(field=="GPA_CUMULATIVE")
+    indicatorFunction=d3.scale.quantize().domain([0,4]).range(["red","red","red", "green"]);
+  else 
+    indicatorFunction=d3.scale.quantize().domain([0,200]).range(["red", "green"]);
+
+  color = (value === null ? "red" : indicatorFunction(value));
+  return color;
+}
+
+var subjectToCourseId = {"HIST":"HIST 226","PHIL":"PHIL 223","COM":"COM 102","BIOL":"BIOL 667","ENG":"ENG 112","ANTH":"ANTH 413"}
+ 
 // Make all the values in the multiple of 100 to scale the values according to the domain
 // and plot it on the graph.
 function updateData(data)
 {
-    data.forEach(function(d) 
-    {
-              d.R_CONTENT_READ *= 100;
-              d.R_FORUM_POST *= 100;
-              d.R_ASN_SUB *= 100;
-              d.R_SESSIONS *= 100;
-              
-    });
+  var count=1;
+  data.forEach(function(d) 
+  {
+            // Update the data required to plot on the chart
+            d.R_CONTENT_READ *= 100;
+            d.R_FORUM_POST *= 100;
+            d.R_ASN_SUB *= 100;
+            d.R_SESSIONS *= 100;
 
-    return data;
+            // NOTE: This could be temporary as the logic to get back the original student id is to be defined here
+            // Replace the managled student id and course id with some other id
+            d.ALTERNATIVE_ID = "Student" + count;
+            d.COURSE_ID = subjectToCourseId[d.SUBJECT];
+            // Increment the count for the next student
+            count++;
+  });
+
+  return data;
 }
 
 
-d3.json("riskscores2.json", function(error, data) 
+d3.json("./../../Data/Sample2.json", function(error, data) 
 {	
-	//console.log(benchMarkData[0])
 	updateData(data);
 
 	// Hide both the tables in the begining
@@ -112,7 +135,9 @@ d3.json("riskscores2.json", function(error, data)
 	$('#riskCategoryList').change( function()
 	    {
 	      selectedCategory = $("#riskCategoryList").val() ;
-	      var filteredData="";
+	      var filteredData=[];
+        // Add the benchmark data
+        filteredData.push(benchMarkData);
 	      if(selectedCategory!="")
 	      {
 	          filteredData = data.filter(function (el) 
@@ -127,9 +152,9 @@ d3.json("riskscores2.json", function(error, data)
 	      }
 	      $("#studentList").html(updateDropdownList(filteredData));
 	     
-	     // Don't add the benchmark polygon if all the data is being displayed
-	      if(selectedCategory!="")
-	      	filteredData.push(benchMarkData);
+	      // Add the benchmark data
+	     	filteredData.push(benchMarkData);
+        //filteredData.unshift(benchMarkData);
 
 	      // Draw the filtered data again
 	      d3.select("svg").remove();
@@ -137,11 +162,8 @@ d3.json("riskscores2.json", function(error, data)
 	      .datum(filteredData)
 	      .call(chart);
 
-	      // For benchmark data, change the color of the whole polygon
-	      if(selectedCategory!="")
-	      {
-	      	highlightBenchmark();
-		    }
+	      highlightBenchmark();
+		    
 
 	      // Hide all the tables as more than one student data is drawn
 	      $(".CSSTableGenerator").fadeOut();
@@ -237,17 +259,14 @@ d3.json("riskscores2.json", function(error, data)
             $("#profile").html(tableData);
             
             // Generate the proper HTML code to display the indicator table
-            // var indGPA=d3.scale.linear().domain([0,3,4]).range(["red","red", "green"]);
-            tableData="<tr><td colspan='3'>Indicator</td></tr>";
+            tableData="<tr><td colspan='4'>Indicator</td></tr>";
             for (var i = 0; i < d.length; i++) 
             {                                                    
-                tableData +="<tr><td>"+d[i]["label"]+"</td><td>"
-                        +(parseFloat(filteredData[0][d[i]["metric"]]).toFixed(2) || 0) // If value if NULL then replace with 0
-                        +"</td>"
-                        +"<td><svg height='15px' width='20px'><g transform='translate(7,7)'><circle r='5px' cx='0px' cx='0px' style='fill:green;' width='15px' height='15px'></circle></g></svg></td>"
+                tableData +="<tr><td>"+d[i]["label"]+"</td>"
+                        //+"<td>"+(parseFloat(filteredData[0][d[i]["metric"]]).toFixed(2) || 0) +"</td>" // If value if NULL then replace with 0                        
+                        +"<td><div id='circle' style='background:"+colorIndicator(d[i]["metric"],(filteredData[0][d[i]["metric"]] || 0))+";'></div></td>"
                         +"</tr>";              
             }
-            console.log(tableData);
             $("#indicator").html(tableData);
             $(".CSSTableGenerator").fadeIn();
             $(".profilepic").fadeIn();
@@ -275,7 +294,8 @@ d3.json("riskscores2.json", function(error, data)
         
         // Add the benchmark to the filtered data to draw the benchmark
         filteredData.push(benchMarkData);
-
+        //filteredData.unshift(benchMarkData);
+        
         // Render the filtered data
         d3.select("svg").remove();
          d3.select("#content")

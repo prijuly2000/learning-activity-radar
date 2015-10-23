@@ -30,6 +30,7 @@
 	margin: auto;
 }
 
+
 .CSSTableGenerator table {
 	box-shadow: 4px 3px 2px #888888;
 	border: 1px solid #000000; !
@@ -80,7 +81,15 @@
 	border-bottom-left-radius: 11px;
 }
 
-
+/* this is for the circles in the indicator table */
+#circle {
+    width: 15px;
+    height: 15px;
+    !background: green;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px; 
+}
 
 .CSSTableGenerator td {
 	vertical-align: middle;
@@ -147,12 +156,6 @@ circle.background {
 	stroke: #DDD;
 	fill: #FFF;
 	stroke-width: 1;
-}
-
-.background:nth-child(3) {
-	!stroke: #A9A9A9;
-	!fill: #FFF;
-	!stroke-width: 4;
 }
 
 .axis path {

@@ -23,11 +23,6 @@ var mouseout = function()
   d3.select("#tooltip").classed("hidden", true);
 };
 
-function drawLegend()
-{
-  var legendData=""
-  
-}
 
 // metricConfiguration is label , metric and domain sent 
 // while calling the function. (check d variable in the mainscript.js)
@@ -40,7 +35,7 @@ function radar(metricConfiguration)
   // for HIGH RISK, Red color
   var color=d3.scale.ordinal()
             .domain(["NO RISK","LOW RISK","MEDIUM RISK","HIGH RISK"])
-            .range(["green","green","orange","red"]);
+            .range(["green","orange","aqua","red"]);
   
   // Metrics is the label, field (or metric) and domain 
   // for the axes provided while calling the function
@@ -368,8 +363,8 @@ function radar(metricConfiguration)
         .attr('d', function (d,i) 
         {       
             return d3.svg.line()
-            .x(function (d) { return d.x; })
-            .y(function (d) { return d.y; })
+            .x(function (d) { return (d.x || 0); })
+            .y(function (d) { return (d.y || 0); })
             .interpolate('linear-closed')
             .call(this, d.points);
         })
@@ -383,8 +378,8 @@ function radar(metricConfiguration)
       .data(function (d) { return d.points;})
       .enter()
       .append('circle')
-      .attr('cx', function (d) { return d.x; })
-      .attr('cy', function (d) { return d.y; })
+      .attr('cx', function (d) {  return (d.x || 0); })
+      .attr('cy', function (d) {  return (d.y || 0); })
       .attr('r', pointRadius)
       .attr('class', 'radarPoint')
       .attr('id', function (d) { return 'radarPoint' + d.id; })
@@ -392,7 +387,6 @@ function radar(metricConfiguration)
       
   };
 
-  drawLegend();
   return chart;
 }
 
