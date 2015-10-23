@@ -35,7 +35,7 @@ function radar(metricConfiguration)
   // for HIGH RISK, Red color
   var color=d3.scale.ordinal()
             .domain(["NO RISK","LOW RISK","MEDIUM RISK","HIGH RISK"])
-            .range(["green","orange","aqua","red"]);
+            .range(["green","blue","orange","red"]);
   
   // Metrics is the label, field (or metric) and domain 
   // for the axes provided while calling the function
@@ -54,7 +54,7 @@ function radar(metricConfiguration)
   {
     // Side is the size of the SVG element and the chart
     // Increament the multiplying factor to increase the size of the chart
-    var side = (radius + margin) * 2.7;
+    var side = (radius + margin) * 2.65;
     selection.each(function (data) 
     {
 
