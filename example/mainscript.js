@@ -17,14 +17,14 @@ function highlightBenchmark()
 {
 	 // For benchmark data, change the color of the whole polygon
 	// Here changes the color of the stroke and the area , not the corner circle dots
-  d3.select(".area:last-child path")
+ /* d3.select(".area:last-child path")
 	.attr("fill","black")
-	.attr("stroke","black");
+	.attr("stroke","black");*/
 
 	// Here it changes the color of the corner circles
-	d3.select(".area:last-child")
+	/*d3.select(".area:last-child")
 	.attr("fill","black")
-	.attr("stroke","black"); 
+	.attr("stroke","black"); */
 
 }
 
@@ -62,7 +62,7 @@ var benchMarkData = {
 		"ACADEMIC_RISK" : "1",
 		"FAIL_PROBABILITY" : 0.054521,
 		"PASS_PROBABILITY" : 0.945479,
-		"MODEL_RISK_CONFIDENCE" : "MEDIUM RISK"
+		"MODEL_RISK_CONFIDENCE" : "BENCHMARK"
 	};
 
 function colorIndicator(field, value)
@@ -109,6 +109,12 @@ d3.json("./../../Data/Sample2.json", function(error, data)
 {	
 	updateData(data);
 
+  // Update the course laber with course id
+  // NOTE : random course name is given for now
+  var courseLabel = {"PHIL":"Philosophy 101", "COM":"Communication 101","BIOL":"Biology 200","ENG":"English 101"};
+  $("#courseLabel").text("Course : " + courseLabel[data[0]["SUBJECT"]]);
+
+
 	// Hide both the tables in the begining
 	$(".CSSTableGenerator").hide();
 	$(".profilepic").hide();
@@ -136,25 +142,23 @@ d3.json("./../../Data/Sample2.json", function(error, data)
 	    {
 	      selectedCategory = $("#riskCategoryList").val() ;
 	      var filteredData=[];
-        // Add the benchmark data
-        filteredData.push(benchMarkData);
 	      if(selectedCategory!="")
 	      {
-	          filteredData = data.filter(function (el) 
-	          {
-	                return el.MODEL_RISK_CONFIDENCE == selectedCategory;
-	          });
-
+          filteredData = data.filter(function (el) 
+          {
+                return el.MODEL_RISK_CONFIDENCE == selectedCategory;
+          });
 	      }
 	      else 
 	      {
-	          filteredData = data;
+          // Deep copy the data to filteredData, otherwise benchmark will be added to the original data.
+	        filteredData = $.extend(true, [], data);
 	      }
 	      $("#studentList").html(updateDropdownList(filteredData));
 	     
 	      // Add the benchmark data
-	     	filteredData.push(benchMarkData);
-        //filteredData.unshift(benchMarkData);
+	     	//filteredData.push(benchMarkData);
+        filteredData.unshift(benchMarkData);
 
 	      // Draw the filtered data again
 	      d3.select("svg").remove();
@@ -285,7 +289,8 @@ d3.json("./../../Data/Sample2.json", function(error, data)
           }
           else
           {
-              filteredData = data;
+              // Deep copy data to filteredData, otherwise benchmark till be added to the original data
+              filteredData = $.extend(true, [], data);;
           }
            $(".CSSTableGenerator").fadeOut(); 
            $(".profilepic").fadeOut(); 
@@ -293,8 +298,8 @@ d3.json("./../../Data/Sample2.json", function(error, data)
         }
         
         // Add the benchmark to the filtered data to draw the benchmark
-        filteredData.push(benchMarkData);
-        //filteredData.unshift(benchMarkData);
+        //filteredData.push(benchMarkData);
+        filteredData.unshift(benchMarkData);
         
         // Render the filtered data
         d3.select("svg").remove();

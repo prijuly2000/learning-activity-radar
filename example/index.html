@@ -4,7 +4,8 @@
 <meta charset="utf-8">
 <style>
 </style>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script type="text/javascript"
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script src="../vendors/d3.v3.min.js" charset="utf-8"></script>
 <script src="../src/d3-radar.js" charset="utf-8"></script>
 <script src="mainscript.js" charset="utf-8"></script>
@@ -25,14 +26,16 @@
 		<h2>Learning Activity Radar</h2>
 		<div class="">
 			&nbsp;&nbsp;&nbsp;&nbsp; 
-			<label>Select Student:&nbsp;&nbsp; </label> 
-			<select class="input" id="studentList"></select>
+			<label>Select Risk Category :&nbsp;&nbsp; </label> 
+			<select class="input" id="riskCategoryList"></select>
 			&nbsp;&nbsp;&nbsp;&nbsp; 
-			<label>Select Risk Category : &nbsp;&nbsp; </label> 
-			<select	class="input" id="riskCategoryList"></select>			
+			<label>Select Student:&nbsp;&nbsp; </label>
+			<select class="input" id="studentList"></select>
 		</div>
-	</div>
+	</div>			
+		
 	<div class="mainchart" style="margin: auto;">
+		<label id="courseLabel" text-align="left" ></label>
 		<div class="CSSTableGenerator" style="height: 180px;">
 			<div class="profilepic">
 				<span class="image-wrap "
@@ -47,64 +50,46 @@
 		</div>
 		<div id="content"></div>
 		<div>
-		<table class="legend" >
-			<tr>
-				<td>
-					<svg height='20px' width='20px'>
+			<table class="legend">
+				<tr>
+					<td><svg height='20px' width='20px'>
 						<g transform='translate(10,10)'>
-							<circle r='10px' cx='0px' cy='0px' fill='black' width='40px' height='40px'></circle>
+							<circle r='10px' cx='0px' cy='0px' fill='black' width='40px'
+								height='40px'></circle>
 						</g>
-					</svg>
-				</td>
-				<td>Class Benchmark Performance</td>
-			</tr>
-			<tr>
-				<td>
-					<svg height='25px' width='20px'>
-						<g transform='translate(10,10)'>
-							<circle r='10px' cx='0px' cy='0px' fill='green' width='40px' height='40px'></circle>
-						</g>
-					</svg>
-				</td>
-				<td>No Risk</td>
-			</tr>
-			<tr>
-				<td>
-					<svg height='25px' width='20px'>
-						<g transform='translate(10,10)'>
-							<circle r='10px' cx='0px' cy='0px' fill='blue' width='40px' height='40px'></circle>
-						</g>
-					</svg>
-				</td>
-				<td>Low Risk</td>
-			</tr>
-			<tr>
-				<td>
-					<svg height='20px' width='20px'>
-						<g transform='translate(10,10)'>
-							<circle r='10px' cx='0px' cy='0px' fill='orange' width='40px' height='40px'></circle>
-						</g>
-					</svg>
-				</td>
-				<td>Medium Risk</td>
-			</tr>
-			<tr>
-				<td>
-					<svg height='20px' width='20px'>
-						<g transform='translate(10,10)'>
-							<circle r='10px' cx='0px' cy='0px' fill='red' width='40px' height='40px'></circle>
-						</g>
-					</svg>
-				</td>
-				<td>High Risk</td>
-			</tr>
+					</svg></td>
+					<td>Class Benchmark Performance</td>
+				</tr>
+				<tr>
+					<td>
+						<div id="legendcircle" style="background: green;"></div>
+					</td>
+					<td>No Risk</td>
+				</tr>
+				<tr>
+					<td>
+						<div id="legendcircle" style="background: orange;"></div>
+					</td>
+					<td>Low Risk</td>
+				</tr>
+				<tr>
+					<td>
+						<div id="legendcircle" style="background: #A6038D;"></div>
+					</td>
+					<td>Medium Risk</td>
+				</tr>
+				<tr>
+					<td>
+						<div id="legendcircle" style="background: #F70000;"></div>
+					</td>
+					<td>High Risk</td>
+				</tr>
 
-		</table>
-	</div>
+			</table>
+		</div>
 	</div>
 
 	<div class="container" id="footer">Marist College, 3399 North
-		Road, Poughkeepsie, NY 12601 
-	</div>
+		Road, Poughkeepsie, NY 12601</div>
 </body>
 </html>

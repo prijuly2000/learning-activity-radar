@@ -34,8 +34,8 @@ function radar(metricConfiguration)
   // for MEDIUM RISK , Orange color
   // for HIGH RISK, Red color
   var color=d3.scale.ordinal()
-            .domain(["NO RISK","LOW RISK","MEDIUM RISK","HIGH RISK"])
-            .range(["green","blue","orange","red"]);
+            .domain(["NO RISK","LOW RISK","MEDIUM RISK","HIGH RISK","BENCHMARK"])
+            .range(["green","orange","#A6038D","#F70000","black"]);
   
   // Metrics is the label, field (or metric) and domain 
   // for the axes provided while calling the function

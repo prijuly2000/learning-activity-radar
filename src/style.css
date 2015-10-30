@@ -9,6 +9,11 @@
 	padding: 10px;
 }
 
+body{
+	margin:0;
+	padding: 0;
+}
+
 .profilepic .image-wrap:hover {
 	float: left;
 	-webkit-box-shadow: 0 0 20px rgba(255, 255, 255, .6), inset 0 0 20px 
@@ -30,7 +35,6 @@
 	margin: auto;
 }
 
-
 .CSSTableGenerator table {
 	box-shadow: 4px 3px 2px #888888;
 	border: 1px solid #000000; !
@@ -39,6 +43,7 @@
 	width: 40%;
 	height: 100%;
 	margin-left: 20px;
+	margin-top: 10px;
 	padding: 0px;
 	border-radius: 11px;
 	-moz-border-radius-bottomleft: 11px;
@@ -75,7 +80,7 @@
 	border-top-right-radius: 11px;
 }
 
-.CSSTableGenerator tr:last-child td:first-child {
+.CSSTableGenerator tr:last-child td:first-child, {
 	-moz-border-radius-bottomleft: 11px;
 	-webkit-border-bottom-left-radius: 11px;
 	border-bottom-left-radius: 11px;
@@ -91,7 +96,7 @@
     border-radius: 25px; 
 }
 
-.CSSTableGenerator td {
+.CSSTableGenerator td ,.mainchart label {
 	vertical-align: middle;
 	background: -o-linear-gradient(bottom, #aad4ff 5%, #ffffff 100%);
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #aad4ff
@@ -120,11 +125,12 @@
 	border-width: 0px 0px 1px 0px;
 }
 
+
 .CSSTableGenerator tr:last-child td:last-child {
 	border-width: 0px 0px 0px 0px;
 }
 
-.CSSTableGenerator tr:first-child td {
+.CSSTableGenerator tr:first-child td,.mainchart label {
 	background: -o-linear-gradient(bottom, #007fff 5%, #0000ff 100%);
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #007fff
 		), color-stop(1, #0000ff));
@@ -215,6 +221,7 @@ circle.background {
 h2 {
 	text-align: center;
 	color: #3079ed;
+	margin-top: 3px;
 }
 
 .input:hover {
@@ -228,8 +235,7 @@ h2 {
 	border: 1px solid grey;
 }
 
-.container { !
-	border: 1px solid black;
+.container { 
 	text-align: center;
 	width: 1200px;
 	background: #f7f7f7;
@@ -237,16 +243,12 @@ h2 {
 	margin: auto;
 	padding-right: 20px;
 	padding-left: 20px;
-	padding-top: 10px;
+	padding-top: 1px;
 	padding-bottom: 10px;
 }
 
-#content {
-	!padding: 30px;
-}
 
-.mainchart { !
-	border: 1px solid black;
+.mainchart{ 
 	text-align: center;
 	width: 1200px;
 	background: #f7f7;
@@ -254,3 +256,13 @@ h2 {
 	margin: auto;
 	padding: 20px;
 }
+
+.mainchart label{
+	font-size: 14px;
+	font-weight: bold;
+	border-radius: 8px;
+	height:65px;
+	padding: 7px;
+}
+
+
