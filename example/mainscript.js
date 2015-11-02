@@ -11,23 +11,6 @@ function updateDropdownList(filteredData)
     return (studentOptions);
 }
 
-// This function highlights the benchark on selection of the student,
-// on selection of a category and on page load when the chart is displayed.
-function highlightBenchmark()
-{
-	 // For benchmark data, change the color of the whole polygon
-	// Here changes the color of the stroke and the area , not the corner circle dots
- /* d3.select(".area:last-child path")
-	.attr("fill","black")
-	.attr("stroke","black");*/
-
-	// Here it changes the color of the corner circles
-	/*d3.select(".area:last-child")
-	.attr("fill","black")
-	.attr("stroke","black"); */
-
-}
-
 // benchMarkData is added and drawn on the selection of a particular student or 
 // on selection of a particular category  	
 var benchMarkData = {
@@ -78,7 +61,8 @@ function colorIndicator(field, value)
   return color;
 }
 
-var subjectToCourseId = {"HIST":"HIST 226","PHIL":"PHIL 223","COM":"COM 102","BIOL":"BIOL 667","ENG":"ENG 112","ANTH":"ANTH 413"}
+var subjectToCourseId = {"EPSY":"EPSY 173","HLTH":"HLTH 677","MSIS":"MSIS 541","PSYC":"PSYC 786","MATH":"MATH 213","CRDV":"CRDV 343","CSIS":"CSIS 987","REST":"REST 439","ECON":"ECON 978","INTD":"INTD 563","ITS":"ITS 458","HIST":"HIST 226","PHIL":"PHIL 223","COM":"COM 102","BIOL":"BIOL 667","ENG":"ENG 112","ANTH":"ANTH 413","FASH":"FASH 321"}
+
  
 // Make all the values in the multiple of 100 to scale the values according to the domain
 // and plot it on the graph.
@@ -97,45 +81,67 @@ function updateData(data)
             // Replace the managled student id and course id with some other id
             d.ALTERNATIVE_ID = "Student" + count;
             d.COURSE_ID = subjectToCourseId[d.SUBJECT];
+        
             // Increment the count for the next student
-            count++;
+            count++;           
   });
 
   return data;
 }
 
-
-d3.json("./../../Data/Sample2.json", function(error, data) 
+d3.json("./../../Data/model_output.json", function(error, data) 
 {	
+  var courseData=[];
+  var selectedCourse="";
+  $('#courseList').change( function()
+      {
+        var studentOptions='<option value=""> All Students </option>';
+        selectedCourse = $("#courseList").val() ;
+        $("#courseLabel").text("Course : " +  selectedCourse).fadeIn();
+        if(selectedCourse!="")
+        {          
+          courseData = data.filter(function (el) 
+          {
+                return el.COURSE_ID == selectedCourse;
+          });
+        }
+        $("#studentList").html(updateDropdownList(courseData));
+       
+        // Hide all the tables as more than one student data is drawn
+        $(".CSSTableGenerator").fadeOut();
+        $(".profilepic").fadeOut();    
+      });
+
 	updateData(data);
 
   // Update the course laber with course id
   // NOTE : random course name is given for now
   var courseLabel = {"PHIL":"Philosophy 101", "COM":"Communication 101","BIOL":"Biology 200","ENG":"English 101"};
-  $("#courseLabel").text("Course : " + courseLabel[data[0]["SUBJECT"]]);
+  
 
 
 	// Hide both the tables in the begining
 	$(".CSSTableGenerator").hide();
-	$(".profilepic").hide();
+  $(".profilepic").hide();
+	$("#courseLabel").hide();
 
 	// Populate the student and the risk category the dropdown lists.
 	var studentOptions='<option value=""> All Students </option>';
-	var riskCategoryOptions= '<option value=""> All Categories </option>';
-	var uniqueRiskCategory = [];
+	var courseOptions= '<option value=""> All Courses </option>';
+	var uniqueCourseList = [];
 	data.forEach(function(d) 
 	{
-	  studentOptions += '<option value="'+d.ALTERNATIVE_ID+'">'+d.ALTERNATIVE_ID+'</option>';
-	  if($.inArray(d.MODEL_RISK_CONFIDENCE, uniqueRiskCategory)==-1)
-	  {
-	    riskCategoryOptions += '<option value="'+d.MODEL_RISK_CONFIDENCE+'">'+d.MODEL_RISK_CONFIDENCE+'</option>';
-	    uniqueRiskCategory.push(d.MODEL_RISK_CONFIDENCE);
-	  }
+	 //studentOptions += '<option value="'+d.ALTERNATIVE_ID+'">'+d.ALTERNATIVE_ID+'</option>';
+    if($.inArray(d.COURSE_ID,uniqueCourseList)==-1)
+    {
+      courseOptions += '<option value="'+d.COURSE_ID+'">'+d.COURSE_ID+'</option>';	
+      uniqueCourseList.push(d.COURSE_ID) 
+    }
 	});   
 	$("#studentList").html(studentOptions);
-	$("#riskCategoryList").html(riskCategoryOptions);
+	$("#courseList").html(courseOptions);
 
-	// Filter the data according to the selected category and update 
+  // Filter the data according to the selected category and update 
 	// the students dropdown list
 	var selectedCategory="";
 	$('#riskCategoryList').change( function()
@@ -144,7 +150,7 @@ d3.json("./../../Data/Sample2.json", function(error, data)
 	      var filteredData=[];
 	      if(selectedCategory!="")
 	      {
-          filteredData = data.filter(function (el) 
+          filteredData = courseData.filter(function (el) 
           {
                 return el.MODEL_RISK_CONFIDENCE == selectedCategory;
           });
@@ -152,7 +158,7 @@ d3.json("./../../Data/Sample2.json", function(error, data)
 	      else 
 	      {
           // Deep copy the data to filteredData, otherwise benchmark will be added to the original data.
-	        filteredData = $.extend(true, [], data);
+	        filteredData = $.extend(true, [], courseData);
 	      }
 	      $("#studentList").html(updateDropdownList(filteredData));
 	     
@@ -165,9 +171,6 @@ d3.json("./../../Data/Sample2.json", function(error, data)
 	       d3.select("#content")
 	      .datum(filteredData)
 	      .call(chart);
-
-	      highlightBenchmark();
-		    
 
 	      // Hide all the tables as more than one student data is drawn
 	      $(".CSSTableGenerator").fadeOut();
@@ -225,8 +228,6 @@ d3.json("./../../Data/Sample2.json", function(error, data)
       .datum([benchMarkData])
       .call(chart);
 
-  highlightBenchmark();
-      
   // On selection of the student, update the profile and 
   // indicator table with the selected student's information
   var filteredData="";
@@ -236,7 +237,7 @@ d3.json("./../../Data/Sample2.json", function(error, data)
         
         if(selectedStudent!="")
         {
-            filteredData = data.filter(function (el) 
+            filteredData = courseData.filter(function (el) 
             {
                   return el.ALTERNATIVE_ID == selectedStudent;
             });
@@ -282,7 +283,7 @@ d3.json("./../../Data/Sample2.json", function(error, data)
           // list with all students present in the data
           if(selectedCategory!="")
           {
-              filteredData = data.filter(function (el) 
+              filteredData = courseData.filter(function (el) 
               {
                     return el.MODEL_RISK_CONFIDENCE == selectedCategory;
               });
@@ -290,7 +291,7 @@ d3.json("./../../Data/Sample2.json", function(error, data)
           else
           {
               // Deep copy data to filteredData, otherwise benchmark till be added to the original data
-              filteredData = $.extend(true, [], data);;
+              filteredData = $.extend(true, [], courseData);
           }
            $(".CSSTableGenerator").fadeOut(); 
            $(".profilepic").fadeOut(); 
@@ -307,8 +308,6 @@ d3.json("./../../Data/Sample2.json", function(error, data)
         .datum(filteredData)
         .call(chart);
 
-        // Call method to highlight the benchmark
-        highlightBenchmark();		
       });
 
 });

@@ -4,8 +4,7 @@
 <meta charset="utf-8">
 <style>
 </style>
-<script type="text/javascript"
-	src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="../vendors/jquery-1.11.3.min.js" charset="utf-8"></script>
 <script src="../vendors/d3.v3.min.js" charset="utf-8"></script>
 <script src="../src/d3-radar.js" charset="utf-8"></script>
 <script src="mainscript.js" charset="utf-8"></script>
@@ -26,8 +25,17 @@
 		<h2>Learning Activity Radar</h2>
 		<div class="">
 			&nbsp;&nbsp;&nbsp;&nbsp; 
+			<label>Select Course:&nbsp;&nbsp; </label>
+			<select class="input" id="courseList"></select>
+			&nbsp;&nbsp;&nbsp;&nbsp; 
 			<label>Select Risk Category :&nbsp;&nbsp; </label> 
-			<select class="input" id="riskCategoryList"></select>
+			<select class="input" id="riskCategoryList">
+				<option value="">All Risk Categories</option>
+				<option value="NO RISK">No Risk</option>
+				<option value="LOW RISK">Low Risk</option>
+				<option value="MEDIUM RISK">Medium Risk</option>
+				<option value="HIGH RISK">High Risk</option>
+			</select>
 			&nbsp;&nbsp;&nbsp;&nbsp; 
 			<label>Select Student:&nbsp;&nbsp; </label>
 			<select class="input" id="studentList"></select>
