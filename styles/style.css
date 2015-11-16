@@ -9,6 +9,23 @@
 	padding: 10px;
 }
 
+#chartholder {
+	height: 400px;
+	width: 600px;
+}
+
+
+.bar rect {
+  fill: steelblue;
+  shape-rendering: crispEdges;
+ !width:90%;
+}
+
+.bar text {
+  fill: #fff;
+}
+
+
 body{
 	margin:0;
 	padding: 0;

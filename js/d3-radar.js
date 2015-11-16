@@ -146,6 +146,12 @@ function radar(metricConfiguration)
                 .call(d3.svg.axis().scale(d.scale));
                 
               chart.drawAxisLabel(d3.select(this));
+        })
+        .on("click",function(){
+          console.log(data);
+          if(data.length==1)
+          $("#histogram").empty();
+          histogramChart(data); 
         });
 
       // Add the chart elements according to the data
@@ -349,7 +355,7 @@ function radar(metricConfiguration)
           return pos;
       })
       .attr('y', function (d) { return (labelOffset + 85) * Math.sin(d.angle); });
-        
+
   };
 
   // This function draws the polygon based on the calculated values 
