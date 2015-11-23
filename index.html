@@ -5,10 +5,13 @@
 <style>
 </style>
 <script src="libs/jquery-1.11.3.min.js" charset="utf-8"></script>
+<script src="libs/bootstrap/js/bootstrap.min.js" charset="utf-8"></script>
 <script src="libs/d3.v3.min.js" charset="utf-8"></script>
+<script src="libs/d3.tip.v0.6.3.js" charset="utf-8"></script>
 <script src="js/d3-radar.js" charset="utf-8"></script>
 <script src="js/mainscript.js" charset="utf-8"></script>
 <script src="js/histogram.js" charset="utf-8"></script>
+<link rel="stylesheet" href="libs/bootstrap/css/bootstrap.min.css" charset="utf-8"></link>
 <link rel="stylesheet" href="styles/style.css" charset="utf-8"></link>
 <link rel="stylesheet" href="styles/legend.css" charset="utf-8"></link>
 </head>
@@ -58,12 +61,8 @@
 			</table>
 		</div>
 		<div id="content"></div>
-		<div>
-			<div id="histogram"></div>
-			<script type="text/javascript">
-				
-			</script>
-			<table class="legend">
+		<div class="row">
+			<table class="legend col-lg-5">
 				<tr>
 					<td><svg height='20px' width='20px'>
 						<g transform='translate(10,10)'>
@@ -98,7 +97,8 @@
 					<td>High Risk</td>
 				</tr>
 
-			</table>
+			</table>			
+			<div class="col-lg-5" style="float:left;border:1px solid grey" id="histogram"></div>
 		</div>
 	</div>
 

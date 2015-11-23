@@ -1,8 +1,12 @@
 .legend {
-	margin:0px;padding:0px;
+	margin:3%;
+	padding:0px;
 	width:320px;
 	box-shadow: 4px 3px 2px #888888;
 	border:1px solid #000000;
+	border-spacing: 2px;
+	border-collapse:initial;
+
 	
 	-moz-border-radius-bottomleft:7px;
 	-webkit-border-bottom-left-radius:7px;

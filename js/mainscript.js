@@ -89,9 +89,10 @@ function updateData(data)
   return data;
 }
 
+var courseData=[];
+
 d3.json("./../../Data/model_output.json", function(error, data) 
-{	
-  var courseData=[];
+{	  
   var selectedCourse="";
   $('#courseList').change( function()
       {
@@ -109,7 +110,8 @@ d3.json("./../../Data/model_output.json", function(error, data)
        
         // Hide all the tables as more than one student data is drawn
         $(".CSSTableGenerator").fadeOut();
-        $(".profilepic").fadeOut();    
+        $(".profilepic").fadeOut();      
+        $("#histogram").fadeOut(); 
       });
 
 	updateData(data);
@@ -123,7 +125,8 @@ d3.json("./../../Data/model_output.json", function(error, data)
 	// Hide both the tables in the begining
 	$(".CSSTableGenerator").hide();
   $(".profilepic").hide();
-	$("#courseLabel").hide();
+	$("#courseLabel").hide();  
+  $("#histogram").hide();
 
 	// Populate the student and the risk category the dropdown lists.
 	var studentOptions='<option value=""> All Students </option>';
