@@ -34,9 +34,15 @@ var tip = d3.tip()
     return tipInfo;
   })
 
+var range=[];
+if(metricSelected != "GPA_CUMULATIVE")
+  range = [0,20,40,60,80,100,120,140,160,180,200]
+else 
+  range = [0,1,2,3,4]
+
 // Generate a histogram using twenty uniformly-spaced bins.
 var data = d3.layout.histogram()
-    .bins([0,20,40,60,80,100,120,140,160,180,200])
+    .bins(range)
     (values);
 
 console.log(data)
@@ -47,7 +53,7 @@ var y = d3.scale.linear()
 
 var xAxis = d3.svg.axis()
     .scale(d3.scale.linear().domain([0, 200]).range([0, width]))
-    .tickValues([0,20,40,60,80,100,120,140,160,180,200])
+    .tickValues(range)
     .orient("bottom")
 
 var svg = d3.select("div #histogram").append("svg")
@@ -75,7 +81,7 @@ bar.append("rect")
 bar.append("text")
     .attr("dy", ".75em")
     .attr("y", 6)
-    .attr("x", x(data[0].dx) /2)
+    .attr("x", 15)
     .attr("text-anchor", "middle")
     .text(function(d) { return formatCount(d.y); });
 
