@@ -20,8 +20,24 @@ var margin = {top: 10, right: 30, bottom: 40, left: 30},
     width = 420 - margin.left - margin.right,
     height = 310 - margin.top - margin.bottom;
 
+var barNumber = 0;
+var range=[];
+var tickScale = null;
+if(metricSelected != "GPA_CUMULATIVE")
+{
+  barNumber =10;
+  range = [0,20,40,60,80,100,120,140,160,180,200]
+  tickScale = d3.scale.linear().domain([0, 200]).range([0, width]);
+}
+else 
+{
+  barNumber =4;
+  range = [0,1,2,3,4]
+  tickScale = d3.scale.linear().domain([0, 4]).range([0, width]);
+}
+
 var x = d3.scale.linear()
-    .domain([0, 10])
+    .domain([0, barNumber])
     .range([0, width]);
 
 
@@ -34,11 +50,7 @@ var tip = d3.tip()
     return tipInfo;
   })
 
-var range=[];
-if(metricSelected != "GPA_CUMULATIVE")
-  range = [0,20,40,60,80,100,120,140,160,180,200]
-else 
-  range = [0,1,2,3,4]
+
 
 // Generate a histogram using twenty uniformly-spaced bins.
 var data = d3.layout.histogram()
@@ -51,8 +63,9 @@ var y = d3.scale.linear()
     .domain([0, d3.max(data, function(d) { return d.y; })])
     .range([height, 0]);
 
+
 var xAxis = d3.svg.axis()
-    .scale(d3.scale.linear().domain([0, 200]).range([0, width]))
+    .scale(tickScale)
     .tickValues(range)
     .orient("bottom")
 
@@ -74,8 +87,8 @@ var bar = svg.selectAll(".bar")
   .on('mouseout', tip.hide);
 
 bar.append("rect")
-    .attr("x", 1)
-    .attr("width", width/10 - 3 ) //width/10 - 10)
+    .attr("x", 1) //1)
+    .attr("width", width/barNumber - 3 ) //width/10 - 10)
     .attr("height", function(d) { return height - y(d.length); });
 
 bar.append("text")
