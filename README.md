@@ -1,4 +1,4 @@
-What is Learning Activity Radar?
+﻿What is Learning Activity Radar?
 ================================
 
 Learning Activity Radar tool provides a detailed visualization that gives a holistic view of student’s academic performance in a course. 
@@ -8,8 +8,11 @@ What can Learning Activity Radar tell me?
 
 The Learning Activity Radar gives the information about the student’s performance. User can select the risk category and the radar will show polygons for all the students who fall in that category. The color of the polygon will be green or red depending on the risk category as shown in the picture below.
 
+!(resources/snap 2.PNG)
 
 The user can also select indivisual student to see his performance. Along with the radar chart, indicator table (which contains academic information) and the profile table (which contains general information) are displayed.  Indicator table displays red or green circle in the last column to show the risk of the student in that metric as shown in the picture below.
+
+!(resources/snap 1.PNG)
 
 Install and deployment 
 ======================
@@ -26,20 +29,6 @@ Learning Activity Radar
 2.	Place this folder in the webapps folder of Tomcat.
 3.	Start Tomcat by running the C:\Tomcat\bin\startup.bat.
 4.	Open Chrome and enter the URL http://localhost:8080/learning-activity-radar/example/index.html
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 Data Format
