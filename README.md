@@ -12,7 +12,7 @@ The Learning Activity Radar gives the information about the student’s performa
 
 The user can also select indivisual student to see his performance. Along with the radar chart, indicator table (which contains academic information) and the profile table (which contains general information) are displayed.  Indicator table displays red or green circle in the last column to show the risk of the student in that metric as shown in the picture below.
 
-![pritesh individual](resources/snap 1.PNG)
+![pritesh individual](resources/snap 1.png)
 
 Install and deployment 
 ======================
