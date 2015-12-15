@@ -8,11 +8,11 @@ What can Learning Activity Radar tell me?
 
 The Learning Activity Radar gives the information about the student’s performance. User can select the risk category and the radar will show polygons for all the students who fall in that category. The color of the polygon will be green or red depending on the risk category as shown in the picture below.
 
-!(resources/snap 2.PNG)
+![pritesh risk_category](resources/snap 2.PNG)
 
 The user can also select indivisual student to see his performance. Along with the radar chart, indicator table (which contains academic information) and the profile table (which contains general information) are displayed.  Indicator table displays red or green circle in the last column to show the risk of the student in that metric as shown in the picture below.
 
-!(resources/snap 1.PNG)
+![pritesh individual](resources/snap 1.PNG)
 
 Install and deployment 
 ======================
