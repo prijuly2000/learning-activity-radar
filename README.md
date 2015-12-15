@@ -3,6 +3,10 @@
 
 Learning Activity Radar tool provides a detailed visualization that gives a holistic view of student’s academic performance in a course. 
 
+Watch the video to get the idea
+
+[![Pritesh LAR](http://img.youtube.com/vi/m-4NbxXllpY/0.jpg)](http://www.youtube.com/watch?v=m-4NbxXllpY)
+
 What can Learning Activity Radar tell me?
 =========================================
 
@@ -61,5 +65,4 @@ CLASS_CODE              | [FR,SO,JR,SR,GR]  | FR=Freshmen, SO=Sophomore, JR=Juni
 
 
 
-[![Pritesh LAR](http://img.youtube.com/vi/m-4NbxXllpY/0.jpg)](http://www.youtube.com/watch?v=m-4NbxXllpY)
 
