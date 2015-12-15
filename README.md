@@ -61,5 +61,5 @@ CLASS_CODE              | [FR,SO,JR,SR,GR]  | FR=Freshmen, SO=Sophomore, JR=Juni
 
 
 
-
+[![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/m-4NbxXllpY/0.jpg)](http://www.youtube.com/watch?v=m-4NbxXllpY)
 
