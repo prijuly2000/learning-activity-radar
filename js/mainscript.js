@@ -91,7 +91,7 @@ function updateData(data)
 
 var courseData=[];
 
-d3.json("../Data/riskscores2.json", function(error, data) 
+d3.json("resources/sample.json", function(error, data) 
 {	  
 
   console.log(data)
