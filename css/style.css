@@ -1,4 +1,36 @@
+/* this class is applied to the histogram chart, for tool tip. */
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+/* Profile pic style to give round curves*/
 .profilepic .image-wrap {
+    margin-top: 20px;
 	-webkit-transition: 1s;
 	-moz-transition: 1s;
 	transition: 1s;
@@ -9,6 +41,34 @@
 	padding: 10px;
 }
 
+
+#chartholder {
+	height: 400px;
+	width: 600px;
+}
+
+/* All histogram bars are filled with steelblue color */
+.bar rect {
+  fill: steelblue;
+}
+
+/* Hover effect for all the bar which turns them into orange */
+.bar rect:hover {
+	fill : orange;
+}
+
+/* White color for text displayed on the bars */
+.bar text {
+  fill: #fff;
+}
+
+
+body{
+	margin:0;
+	padding: 0;
+}
+
+/* On hover over the image, the image turns to circle */
 .profilepic .image-wrap:hover {
 	float: left;
 	-webkit-box-shadow: 0 0 20px rgba(255, 255, 255, .6), inset 0 0 20px 
@@ -22,22 +82,16 @@
 	border-radius: 60em;
 }
 
-.CSSTableGenerator {
-	padding: 0px;
-	width: 1200px; !
-	box-shadow: 4px 3px 2px #888888; !
-	border: 1px solid #000000;
-	margin: auto;
-}
-
+/* Style for both profile and indicator tables */
 .CSSTableGenerator table {
+	border-spacing: 2px;
+	border-collapse:initial;
 	box-shadow: 4px 3px 2px #888888;
-	border: 1px solid #000000; !
-	border-collapse: collapse; !
-	border-spacing: 0;
+	border: 1px solid #000000;
 	width: 40%;
 	height: 100%;
 	margin-left: 20px;
+	margin-top: 10px;
 	padding: 0px;
 	border-radius: 11px;
 	-moz-border-radius-bottomleft: 11px;
@@ -54,35 +108,50 @@
 	border-top-left-radius: 11px;
 }
 
+
+/* Set bottom-left column curve edges for profile and indicator table */
 .CSSTableGenerator tr:last-child td:last-child {
 	-moz-border-radius-bottomright: 11px;
 	-webkit-border-bottom-right-radius: 11px;
 	border-bottom-right-radius: 11px;
 }
 
+
+/* Set top-left column curve edges for profile and indicator table */
 .CSSTableGenerator table tr:first-child td:first-child {
 	-moz-border-radius-topleft: 11px;
 	-webkit-border-top-left-radius: 11px;
 	border-top-left-radius: 11px;
 }
 
+
+/* Set top-right column curve edges for profile and indicator table */
 .CSSTableGenerator table tr:first-child td:last-child {
 	-moz-border-radius-topright: 11px;
 	-webkit-border-top-right-radius: 11px;
 	border-top-right-radius: 11px;
 }
 
-.CSSTableGenerator tr:last-child td:first-child {
+
+/* Set bottom-right column curve edges for profile and indicator table */
+.CSSTableGenerator tr:last-child td:first-child, {
 	-moz-border-radius-bottomleft: 11px;
 	-webkit-border-bottom-left-radius: 11px;
 	border-bottom-left-radius: 11px;
 }
 
-.CSSTableGenerator tr:hover td {
-	background-color: #ffffff;
+/* Turn div into circles in the indicator table */
+#circle {
+    width: 15px;
+    height: 15px;
+    !background: green;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px; 
 }
 
-.CSSTableGenerator td {
+
+.CSSTableGenerator td ,.mainchart label {
 	vertical-align: middle;
 	background: -o-linear-gradient(bottom, #aad4ff 5%, #ffffff 100%);
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #aad4ff
@@ -102,19 +171,13 @@
 	color: #000000;
 }
 
+/* Remove the space between the last row (of profile and indicator table) and the table border */
 .CSSTableGenerator tr:last-child td {
 	border-width: 0px 1px 0px 0px;
 }
 
-.CSSTableGenerator tr td:last-child {
-	border-width: 0px 0px 1px 0px;
-}
-
-.CSSTableGenerator tr:last-child td:last-child {
-	border-width: 0px 0px 0px 0px;
-}
-
-.CSSTableGenerator tr:first-child td {
+/*  */
+.CSSTableGenerator tr:first-child td,.mainchart label {
 	background: -o-linear-gradient(bottom, #007fff 5%, #0000ff 100%);
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #007fff
 		), color-stop(1, #0000ff));
@@ -132,16 +195,7 @@
 	color: #ffffff;
 }
 
-.CSSTableGenerator tr:first-child:hover td {
-	background: -o-linear-gradient(bottom, #007fff 5%, #0000ff 100%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #007fff
-		), color-stop(1, #0000ff));
-	background: -moz-linear-gradient(center top, #007fff 5%, #0000ff 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#007fff",
-		endColorstr="#0000ff");
-	background: -o-linear-gradient(top, #007fff, 0000ff);
-	background-color: #007fff;
-}
+
 
 .CSSTableGenerator tr:first-child td:first-child {
 	border-width: 0px 0px 1px 0px;
@@ -151,46 +205,54 @@
 	border-width: 0px 0px 1px 1px;
 }
 
+/* Background circles for the radar chart */
 circle.background {
-	stroke: #DDD;
+	stroke: grey;
 	fill: #FFF;
 	stroke-width: 1;
 }
 
-.background:nth-child(3) {
-	!stroke: #A9A9A9;
-	!fill: #FFF;
-	!stroke-width: 4;
-}
-
+/* Line axes plot on the radar background*/
 .axis path {
 	fill: none;
 	stroke: grey;
 	stroke-width: 1;
 }
 
+/*Remove the default scale ticks from the radar. If this is commented then all the ticks will be displayed */
 .axisScale text {
 	display: none;
 }
 
+/* Polygons displayed for each student, will have dark edges but light opacity */
 .area {
 	stroke-width: 2;
 	fill-opacity: 0.3;
 }
 
+/* On hover, make the polygons dark */
 .area:hover {
 	fill-opacity: 0.8;
 }
 
+/* Set the axis label style */
 .axisLabel {
 	font: 14px sans-serif;
-	text-transform: capitalize;
 	!text-anchor: middle;
 	font-weight: bold;
 	fill: #333;
 	stroke: none;
 }
 
+/* Make the axis label big and red on hover */
+.axisLabel:hover{
+	font-weight: bold;
+	fill:red;
+	font:16px sans-serif;
+	cursor: pointer;
+}
+
+/* //////////////////////////////////// TOOL TIP CSS FOR RADAR CHART /////////////////////  */
 #tooltip {
 	position: absolute;
 	width: 220px;
@@ -217,9 +279,16 @@ circle.background {
 	line-height: 20px;
 }
 
+/* //////////////////////////// END OF TOOL TIP CSS /////////////////////////// */
+
 h2 {
 	text-align: center;
 	color: #3079ed;
+	margin-top: 3px;
+	font-weight: bold;
+	font-size: 24px;
+	font-family: "Times new roman";
+
 }
 
 .input:hover {
@@ -233,22 +302,20 @@ h2 {
 	border: 1px solid grey;
 }
 
-.container { !
-	border: 1px solid black;
+.container { 
 	text-align: center;
 	width: 1200px;
 	background: #f7f7f7;
 	box-shadow: 1px 2px 3px grey;
 	margin: auto;
-	padding: 20px;
+	padding-right: 20px;
+	padding-left: 20px;
+	padding-top: 1px;
+	padding-bottom: 10px;
 }
 
-#content {
-	padding: 30px;
-}
-
-.mainchart { !
-	border: 1px solid black;
+/* Set te dimentions for the main chart div */
+.mainchart{ 
 	text-align: center;
 	width: 1200px;
 	background: #f7f7;
@@ -256,3 +323,13 @@ h2 {
 	margin: auto;
 	padding: 20px;
 }
+
+.mainchart label{
+	font-size: 14px;
+	font-weight: bold;
+	border-radius: 8px;
+	!height:65px;
+	padding: 7px;
+}
+
+

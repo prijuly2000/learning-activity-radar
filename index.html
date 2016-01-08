@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+</style>
+<script src="libs/jquery-1.11.3.min.js" charset="utf-8"></script>
+<script src="libs/bootstrap/js/bootstrap.min.js" charset="utf-8"></script>
+<script src="libs/d3.v3.min.js" charset="utf-8"></script>
+<script src="libs/d3.tip.v0.6.3.js" charset="utf-8"></script>
+<script src="js/d3-radar.js" charset="utf-8"></script>
+<script src="js/mainscript.js" charset="utf-8"></script>
+<script src="js/histogram.js" charset="utf-8"></script>
+<link rel="stylesheet" href="libs/bootstrap/css/bootstrap.min.css" charset="utf-8"></link>
+<link rel="stylesheet" href="css/style.css" charset="utf-8"></link>
+<link rel="stylesheet" href="css/legend.css" charset="utf-8"></link>
+</head>
+<body>
+	<div id="tooltip" class="hidden">
+		<p>
+			<strong id="heading"></strong>
+		</p>
+		<p>
+			<span id="count"></span>
+		</p>
+	</div>
+	<div id="container"></div>
+	<div class="container">
+		<h2>Learning Activity Radar</h2>
+		<div class="row">
+			&nbsp;&nbsp;&nbsp;&nbsp; 
+			<label>Select Course:&nbsp;&nbsp; </label>
+			<select  class="input" id="courseList"></select>
+			&nbsp;&nbsp;&nbsp;&nbsp; 
+			<label>Select Risk Category :&nbsp;&nbsp; </label> 
+			<select class="input" id="riskCategoryList">
+				<option value="">All Risk Categories</option>
+				<option value="NO RISK">No Risk</option>
+				<option value="LOW RISK">Low Risk</option>
+				<option value="MEDIUM RISK">Medium Risk</option>
+				<option value="HIGH RISK">High Risk</option>
+			</select>
+			&nbsp;&nbsp;&nbsp;&nbsp; 
+			<label>Select Student:&nbsp;&nbsp; </label>
+			<select class="input" id="studentList"></select>
+		</div>
+	</div>			
+		
+	<div class="mainchart" style="margin: auto;">
+		<label id="courseLabel" text-align="left" ></label>
+		<div class="CSSTableGenerator" style="height: 180px;">
+			<div class="profilepic">
+				<span class="image-wrap "
+					style="position: relative; display: inline-block; background: url(images.jpg) no-repeat center center; width: 150px; height: 160px; margin-right: 10px; float: left"></span>
+			</div>
+			<table id="profile" style="float: left;">
+
+			</table>
+			<table id="indicator" style="float: left;">
+
+			</table>
+		</div>
+		<div id="content"></div>
+		<div class="row">
+			<table class="legend col-sm-5">
+				<tr>
+					<td><svg height='20px' width='20px'>
+						<g transform='translate(10,10)'>
+							<circle r='10px' cx='0px' cy='0px' fill='black' width='40px'
+								height='40px'></circle>
+						</g>
+					</svg></td>
+					<td>Class Benchmark Performance</td>
+				</tr>
+				<tr>
+					<td>
+						<div id="legendcircle" style="background: green;"></div>
+					</td>
+					<td>No Risk</td>
+				</tr>
+				<tr>
+					<td>
+						<div id="legendcircle" style="background: orange;"></div>
+					</td>
+					<td>Low Risk</td>
+				</tr>
+				<tr>
+					<td>
+						<div id="legendcircle" style="background: #A6038D;"></div>
+					</td>
+					<td>Medium Risk</td>
+				</tr>
+				<tr>
+					<td>
+						<div id="legendcircle" style="background: #F70000;"></div>
+					</td>
+					<td>High Risk</td>
+				</tr>
+
+			</table>			
+			<div class="col-sm-5" style="float:left;border:1px solid grey" id="histogram"></div>
+		</div>
+	</div>
+
+	<div class="container" id="footer">Marist College, 3399 North
+		Road, Poughkeepsie, NY 12601</div>
+</body>
+</html>

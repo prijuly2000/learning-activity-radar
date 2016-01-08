@@ -14,7 +14,7 @@ function updateDropdownList(filteredData)
 // benchMarkData is added and drawn on the selection of a particular student or 
 // on selection of a particular category  	
 var benchMarkData = {
-		"ALTERNATIVE_ID" : "Bench Mark",
+		"ALTERNATIVE_ID" : "Class Benchmark Performance",
 		"COURSE_ID" : "Bench_Mark",
 		"SUBJECT" : "Bench_Mark",
 		"ONLINE_FLAG" : "1",
@@ -45,94 +45,137 @@ var benchMarkData = {
 		"ACADEMIC_RISK" : "1",
 		"FAIL_PROBABILITY" : 0.054521,
 		"PASS_PROBABILITY" : 0.945479,
-		"MODEL_RISK_CONFIDENCE" : "MEDIUM RISK"
+		"MODEL_RISK_CONFIDENCE" : "BENCHMARK"
 	};
 
+function colorIndicator(field, value)
+{
+  var color ;
+  var indicatorFunction;
+  if(field=="GPA_CUMULATIVE")
+    indicatorFunction=d3.scale.quantize().domain([0,4]).range(["red","red","red", "green"]);
+  else 
+    indicatorFunction=d3.scale.quantize().domain([0,200]).range(["red", "green"]);
+
+  color = (value === null ? "red" : indicatorFunction(value));
+  return color;
+}
+
+var subjectToCourseId = {"Management":"MBA 101","EPSY":"EPSY 173","HLTH":"HLTH 677","MSIS":"MSIS 541","PSYC":"PSYC 786","MATH":"MATH 213","CRDV":"CRDV 343","CSIS":"CSIS 987","REST":"REST 439","ECON":"ECON 978","INTD":"INTD 563","ITS":"ITS 458","HIST":"HIST 226","PHIL":"PHIL 223","COM":"COM 102","BIOL":"BIOL 667","ENG":"ENG 112","ANTH":"ANTH 413","FASH":"FASH 321"}
+
+ 
 // Make all the values in the multiple of 100 to scale the values according to the domain
 // and plot it on the graph.
 function updateData(data)
 {
-    data.forEach(function(d) 
-    {
-              d.R_CONTENT_READ *= 100;
-              d.R_FORUM_POST *= 100;
-              d.R_ASN_SUB *= 100;
-              d.R_SESSIONS *= 100;
-              
-    });
+  var count=1;
+  data.forEach(function(d) 
+  {
+            // Update the data required to plot on the chart
+            d.R_CONTENT_READ *= 100;
+            d.R_FORUM_POST *= 100;
+            d.R_ASN_SUB *= 100;
+            d.R_SESSIONS *= 100;
 
-    return data;
+            // NOTE: This could be temporary as the logic to get back the original student id is to be defined here
+            // Replace the managled student id and course id with some other id
+            d.ALTERNATIVE_ID = "Student" + count;
+            d.COURSE_ID = subjectToCourseId[d.SUBJECT];
+        
+            // Increment the count for the next student
+            count++;           
+  });
+
+  return data;
 }
 
-d3.json("riskscores2.json", function(error, data) 
-{	
+var courseData=[];
+
+d3.json("resources/sample.json", function(error, data) 
+{	  
+
+  console.log(data)
+  var selectedCourse="";
+  $('#courseList').change( function()
+      {
+        var studentOptions='<option value=""> All Students </option>';
+        selectedCourse = $("#courseList").val() ;
+        $("#courseLabel").text("Course : " +  selectedCourse).fadeIn();
+        if(selectedCourse!="")
+        {          
+          courseData = data.filter(function (el) 
+          {
+                return el.COURSE_ID == selectedCourse;
+          });
+        }
+        $("#studentList").html(updateDropdownList(courseData));
+       
+        // Hide all the tables as more than one student data is drawn
+        $(".CSSTableGenerator").fadeOut();
+        $(".profilepic").fadeOut();      
+        $("#histogram").fadeOut(); 
+      });
 
 	updateData(data);
 
+  // Update the course laber with course id
+  // NOTE : random course name is given for now
+  var courseLabel = {"PHIL":"Philosophy 101", "COM":"Communication 101","BIOL":"Biology 200","ENG":"English 101"};
+  
+
+
 	// Hide both the tables in the begining
 	$(".CSSTableGenerator").hide();
-	$(".profilepic").hide();
+  $(".profilepic").hide();
+	$("#courseLabel").hide();  
+  $("#histogram").hide();
 
 	// Populate the student and the risk category the dropdown lists.
 	var studentOptions='<option value=""> All Students </option>';
-	var riskCategoryOptions= '<option value=""> All Categories </option>';
-	var uniqueRiskCategory = [];
+	var courseOptions= '<option value=""> All Courses </option>';
+	var uniqueCourseList = [];
 	data.forEach(function(d) 
 	{
-	  studentOptions += '<option value="'+d.ALTERNATIVE_ID+'">'+d.ALTERNATIVE_ID+'</option>';
-	  if($.inArray(d.MODEL_RISK_CONFIDENCE, uniqueRiskCategory)==-1)
-	  {
-	    riskCategoryOptions += '<option value="'+d.MODEL_RISK_CONFIDENCE+'">'+d.MODEL_RISK_CONFIDENCE+'</option>';
-	    uniqueRiskCategory.push(d.MODEL_RISK_CONFIDENCE);
-	  }
+	 //studentOptions += '<option value="'+d.ALTERNATIVE_ID+'">'+d.ALTERNATIVE_ID+'</option>';
+    if($.inArray(d.COURSE_ID,uniqueCourseList)==-1)
+    {
+      courseOptions += '<option value="'+d.COURSE_ID+'">'+d.COURSE_ID+'</option>';	
+      uniqueCourseList.push(d.COURSE_ID) 
+    }
 	});   
 	$("#studentList").html(studentOptions);
-	$("#riskCategoryList").html(riskCategoryOptions);
+	$("#courseList").html(courseOptions);
 
-	// Filter the data according to the selected category and update 
+  // Filter the data according to the selected category and update 
 	// the students dropdown list
 	var selectedCategory="";
 	$('#riskCategoryList').change( function()
 	    {
 	      selectedCategory = $("#riskCategoryList").val() ;
-	      var filteredData="";
+	      var filteredData=[];
 	      if(selectedCategory!="")
 	      {
-	          filteredData = data.filter(function (el) 
-	          {
-	                return el.MODEL_RISK_CONFIDENCE == selectedCategory;
-	          });
-
+          filteredData = courseData.filter(function (el) 
+          {
+                return el.MODEL_RISK_CONFIDENCE == selectedCategory;
+          });
 	      }
 	      else 
 	      {
-	          filteredData=data;
+          // Deep copy the data to filteredData, otherwise benchmark will be added to the original data.
+	        filteredData = $.extend(true, [], courseData);
 	      }
 	      $("#studentList").html(updateDropdownList(filteredData));
 	     
-	     // Don't add the benchmark polygon if all the data is being displayed
-	      if(selectedCategory!="")
-	      	filteredData.push(benchMarkData);
+	      // Add the benchmark data
+	     	//filteredData.push(benchMarkData);
+        filteredData.unshift(benchMarkData);
 
 	      // Draw the filtered data again
 	      d3.select("svg").remove();
 	       d3.select("#content")
 	      .datum(filteredData)
 	      .call(chart);
-
-	      // For benchmark data, change the color of the whole polygon
-	      if(selectedCategory!="")
-	      {
-	      	// Here changes the color of the stroke and the area , not the corner circle dots
-			d3.select(".area:last-child path")
-			.attr("fill","black")
-			.attr("stroke","black");
-
-	      	// Here it changes the color of the corner circles
-			d3.select(".area:last-child")
-			.attr("fill","black")
-			.attr("stroke","black");
-		  }
 
 	      // Hide all the tables as more than one student data is drawn
 	      $(".CSSTableGenerator").fadeOut();
@@ -172,8 +215,7 @@ d3.json("riskscores2.json", function(error, data)
       "label": "Sessions Activity",
       "metric": "R_SESSIONS",
       "domain" : [0, 200]
-    }]; 
-  
+    }];   
   
   
   var chart = radar(d)
@@ -186,24 +228,24 @@ d3.json("riskscores2.json", function(error, data)
     selection.selectAll('.radarPoint')
   };
 
-  
+  // Render the benchmark on page load 
   d3.select("#content")
-      .datum(data)
+      .datum([benchMarkData])
       .call(chart);
-      
+
   // On selection of the student, update the profile and 
   // indicator table with the selected student's information
+  var filteredData="";
   $('#studentList').change(function()
       {
         var selectedStudent = $("#studentList").val() ;
-        var filteredData="";
+        
         if(selectedStudent!="")
         {
-            filteredData = data.filter(function (el) 
+            filteredData = courseData.filter(function (el) 
             {
                   return el.ALTERNATIVE_ID == selectedStudent;
             });
-            //console.log(filteredData);
             
             // Generate the proper HTML code to display the profile table
             var tableData = "<tr><td colspan='2'>Profile</td></tr>";
@@ -227,19 +269,18 @@ d3.json("riskscores2.json", function(error, data)
             $("#profile").html(tableData);
             
             // Generate the proper HTML code to display the indicator table
-            // var indGPA=d3.scale.linear().domain([0,3,4]).range(["red","red", "green"]);
-            tableData="<tr><td colspan='3'>Indicator</td></tr>";
+            tableData="<tr><td colspan='4'>Indicator</td></tr>";
             for (var i = 0; i < d.length; i++) 
-            {                                                    // If value if NULL then replace with 0
-                tableData +="<tr><td>"+d[i]["label"]+"</td><td>"
-                        +(parseFloat(filteredData[0][d[i]["metric"]]).toFixed(2) || 0)
-                        +"</td>"
-                         +"</tr>";              
+            {                                                    
+                tableData +="<tr><td>"+d[i]["label"]+"</td>"
+                        //+"<td>"+(parseFloat(filteredData[0][d[i]["metric"]]).toFixed(2) || 0) +"</td>" // If value if NULL then replace with 0                        
+                        +"<td><div id='circle' style='background:"+colorIndicator(d[i]["metric"],(filteredData[0][d[i]["metric"]] || 0))+";'></div></td>"
+                        +"</tr>";              
             }
             $("#indicator").html(tableData);
             $(".CSSTableGenerator").fadeIn();
             $(".profilepic").fadeIn();
-            
+           
         }
         else
         {
@@ -247,39 +288,31 @@ d3.json("riskscores2.json", function(error, data)
           // list with all students present in the data
           if(selectedCategory!="")
           {
-              filteredData = data.filter(function (el) 
+              filteredData = courseData.filter(function (el) 
               {
                     return el.MODEL_RISK_CONFIDENCE == selectedCategory;
               });
           }
           else
           {
-              filteredData = data;
+              // Deep copy data to filteredData, otherwise benchmark till be added to the original data
+              filteredData = $.extend(true, [], courseData);
           }
            $(".CSSTableGenerator").fadeOut(); 
            $(".profilepic").fadeOut(); 
              
         }
         
-        filteredData.push(benchMarkData);
-
+        // Add the benchmark to the filtered data to draw the benchmark
+        //filteredData.push(benchMarkData);
+        filteredData.unshift(benchMarkData);
+        
+        // Render the filtered data
         d3.select("svg").remove();
          d3.select("#content")
         .datum(filteredData)
         .call(chart);
 
-        // For benchmark data, change the color of the whole polygon
-		// Here changes the color of the stroke and the area , not the corner circle dots
-		d3.select(".area:last-child path")
-		.attr("fill","black")
-		.attr("stroke","black");
-
-		// Here it changes the color of the corner circles
-		d3.select(".area:last-child")
-		.attr("fill","black")
-		.attr("stroke","black");
-		
-
       });
-  
+
 });
